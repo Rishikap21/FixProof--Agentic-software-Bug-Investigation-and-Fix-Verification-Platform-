@@ -32,6 +32,8 @@
             <a href="investigation.html" class="nav-link"><span>⌕</span> Investigation</a>
             <a href="report.html" class="nav-link"><span>📝</span>Report</a>
             <a href="patch-review.html" class="nav-link"><span>⌘</span> Patch Review</a>
+            <a href="verification.html" class="nav-link"><span>✓</span> Verification Reports</a>
+            <a href="#patchHistory" class="nav-link"><span>✓</span> Patch History</a>
         </nav>
 
         <div class="sidebar-bottom">
@@ -235,6 +237,43 @@
                 </table>
             </div>
         </section>
+
+        <!-- PATCH REVIEW HISTORY -->
+<section id="patchHistory" class="content-card">
+    <div class="section-heading history-heading">
+        <div>
+            <p class="eyebrow">PATCH MANAGEMENT</p>
+            <h2>Patch Review History</h2>
+            <p>Track approved, rejected and pending code patches.</p>
+        </div>
+
+        <button id="refreshPatchesButton" class="secondary-button">
+            ↻ Refresh
+        </button>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>PATCH ID</th>
+                    <th>BUG ID</th>
+                    <th>STATUS</th>
+                    <th>SUBMITTED</th>
+                    <th>REVIEWED</th>
+                </tr>
+            </thead>
+
+            <tbody id="patchTableBody">
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        Loading patches...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
         <footer class="footer">
             <p>© 2026 FixProof. Agentic Software Bug Investigation and Fix Verification Platform.</p>

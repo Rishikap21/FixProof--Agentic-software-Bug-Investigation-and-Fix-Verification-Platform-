@@ -7,6 +7,8 @@ from . import models
 from .database import Base, engine, get_db
 from .schemas import BugCreate, BugResponse
 from .routes import projects
+from .routes import patches
+from .routes import verification
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -27,6 +29,8 @@ app.add_middleware(
 
 # Register project routes
 app.include_router(projects.router)
+app.include_router(patches.router)
+app.include_router(verification.router)
 
 
 @app.get("/")

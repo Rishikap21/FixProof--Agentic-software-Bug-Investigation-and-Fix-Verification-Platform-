@@ -19,6 +19,11 @@ const projectMessage = document.getElementById("projectMessage");
 const uploadButton = document.getElementById("uploadButton");
 const refreshProjectsButton = document.getElementById("refreshProjectsButton");
 
+// Patch elements
+const patchTableBody = document.getElementById("patchTableBody");
+const refreshPatchesButton = document.getElementById("refreshPatchesButton");
+
+
 // Create safe table cells
 function createCell(value) {
     const cell = document.createElement("td");
@@ -28,6 +33,8 @@ function createCell(value) {
 
 // Format date
 function formatDate(dateString) {
+    if (!dateString) return "Unknown";
+
     const date = new Date(dateString);
 
     if (Number.isNaN(date.getTime())) {
@@ -51,6 +58,8 @@ function createStatusCell(status) {
 
 // Display messages
 function showMessage(element, message, type) {
+    if (!element) return;
+
     element.textContent = message;
     element.className = `form-message ${type}`;
 }
@@ -71,14 +80,21 @@ function updateStatistics(bugs) {
         bug => !["Verified", "Resolved"].includes(bug.status)
     ).length;
 
-    document.getElementById("totalBugs").textContent = total;
-    document.getElementById("investigatingBugs").textContent = investigating;
-    document.getElementById("verifiedBugs").textContent = verified;
-    document.getElementById("unresolvedBugs").textContent = unresolved;
+    const totalElement = document.getElementById("totalBugs");
+    const investigatingElement = document.getElementById("investigatingBugs");
+    const verifiedElement = document.getElementById("verifiedBugs");
+    const unresolvedElement = document.getElementById("unresolvedBugs");
+
+    if (totalElement) totalElement.textContent = total;
+    if (investigatingElement) investigatingElement.textContent = investigating;
+    if (verifiedElement) verifiedElement.textContent = verified;
+    if (unresolvedElement) unresolvedElement.textContent = unresolved;
 }
 
 // Load bug reports
 async function loadBugs() {
+    if (!bugTableBody) return;
+
     bugTableBody.replaceChildren();
 
     const loadingRow = document.createElement("tr");
@@ -147,60 +163,68 @@ async function loadBugs() {
 }
 
 // Submit bug report
-bugForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+if (bugForm) {
+    bugForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-    const title = bugTitle.value.trim();
-    const description = bugDescription.value.trim();
+        const title = bugTitle.value.trim();
+        const description = bugDescription.value.trim();
 
-    if (title.length < 3 || description.length < 5) {
-        showMessage(
-            formMessage,
-            "Please enter a valid title and description.",
-            "error"
-        );
-        return;
-    }
-
-    submitButton.disabled = true;
-    submitButton.textContent = "Submitting...";
-
-    try {
-        const response = await fetch(`${API_URL}/bugs`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ title, description })
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.detail || "Failed to submit bug report.");
+        if (title.length < 3 || description.length < 5) {
+            showMessage(
+                formMessage,
+                "Please enter a valid title and description.",
+                "error"
+            );
+            return;
         }
 
-        showMessage(
-            formMessage,
-            `Bug report #BUG-${result.id} submitted successfully!`,
-            "success"
-        );
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
 
-        bugForm.reset();
-        await loadBugs();
+        try {
+            const response = await fetch(`${API_URL}/bugs`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title, description })
+            });
 
-    } catch (error) {
-        showMessage(formMessage, error.message, "error");
-        console.error("Submission error:", error);
+            const result = await response.json();
 
-    } finally {
-        submitButton.disabled = false;
-        submitButton.textContent = "Submit Bug Report →";
-    }
-});
+            if (!response.ok) {
+                throw new Error(
+                    typeof result.detail === "string"
+                        ? result.detail
+                        : JSON.stringify(result.detail || "Failed to submit bug report.")
+                );
+            }
+
+            showMessage(
+                formMessage,
+                `Bug report #BUG-${result.id} submitted successfully!`,
+                "success"
+            );
+
+            bugForm.reset();
+            await loadBugs();
+
+        } catch (error) {
+            showMessage(formMessage, error.message, "error");
+            console.error("Submission error:", error);
+
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Bug Report →";
+        }
+    });
+}
 
 // Load uploaded projects
 async function loadProjects() {
+    if (!projectTableBody) return;
+
     projectTableBody.replaceChildren();
 
     const loadingRow = document.createElement("tr");
@@ -267,77 +291,204 @@ async function loadProjects() {
 }
 
 // Upload ZIP project
-projectForm.addEventListener("submit", async function(event) {
-    event.preventDefault();
+if (projectForm) {
+    projectForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
 
-    const name = projectName.value.trim();
-    const file = projectFile.files[0];
+        const name = projectName.value.trim();
+        const file = projectFile.files[0];
 
-    if (!name) {
-        showMessage(projectMessage, "Please enter a project name.", "error");
-        return;
-    }
+        if (!name) {
+            showMessage(projectMessage, "Please enter a project name.", "error");
+            return;
+        }
 
-    if (!file) {
-        showMessage(projectMessage, "Please select a ZIP file.", "error");
-        return;
-    }
+        if (!file) {
+            showMessage(projectMessage, "Please select a ZIP file.", "error");
+            return;
+        }
 
-    if (!file.name.toLowerCase().endsWith(".zip")) {
-        showMessage(projectMessage, "Only ZIP files are allowed.", "error");
-        return;
-    }
+        if (!file.name.toLowerCase().endsWith(".zip")) {
+            showMessage(projectMessage, "Only ZIP files are allowed.", "error");
+            return;
+        }
 
-    if (file.size > 50 * 1024 * 1024) {
-        showMessage(projectMessage, "File size must not exceed 50 MB.", "error");
-        return;
-    }
+        if (file.size > 50 * 1024 * 1024) {
+            showMessage(projectMessage, "File size must not exceed 50 MB.", "error");
+            return;
+        }
 
-    uploadButton.disabled = true;
-    uploadButton.textContent = "Uploading...";
+        uploadButton.disabled = true;
+        uploadButton.textContent = "Uploading...";
+
+        try {
+            const formData = new FormData();
+
+            formData.append("project_name", name);
+            formData.append("file", file);
+
+            const response = await fetch(`${API_URL}/projects/upload`, {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    typeof result.detail === "string"
+                        ? result.detail
+                        : JSON.stringify(result.detail || "Project upload failed.")
+                );
+            }
+
+            showMessage(
+                projectMessage,
+                `Project "${result.project_name}" uploaded successfully! Project ID: ${result.id}`,
+                "success"
+            );
+
+            projectForm.reset();
+            await loadProjects();
+
+        } catch (error) {
+            showMessage(projectMessage, error.message, "error");
+            console.error("Project upload error:", error);
+
+        } finally {
+            uploadButton.disabled = false;
+            uploadButton.textContent = "Upload Project →";
+        }
+    });
+}
+
+// Load saved patches
+// Load patch history
+async function loadPatches() {
+    if (!patchTableBody) return;
+
+    patchTableBody.replaceChildren();
+
+    const loadingRow = document.createElement("tr");
+    const loadingCell = createCell("Loading patch history...");
+    loadingCell.colSpan = 5;
+    loadingCell.className = "empty-state";
+    loadingRow.appendChild(loadingCell);
+    patchTableBody.appendChild(loadingRow);
 
     try {
-        const formData = new FormData();
+        const response = await fetch(`${API_URL}/patches`);
 
-        formData.append("project_name", name);
-        formData.append("file", file);
+        if (!response.ok) {
+            throw new Error("Unable to retrieve patches.");
+        }
 
-        const response = await fetch(`${API_URL}/projects/upload`, {
-            method: "POST",
-            body: formData
+        const patches = await response.json();
+        patchTableBody.replaceChildren();
+
+        if (patches.length === 0) {
+            const row = document.createElement("tr");
+            const cell = createCell("No patches submitted yet.");
+            cell.colSpan = 5;
+            cell.className = "empty-state";
+            row.appendChild(cell);
+            patchTableBody.appendChild(row);
+            return;
+        }
+
+        patches.forEach(patch => {
+            const row = document.createElement("tr");
+
+            row.appendChild(createCell(`#PATCH-${patch.id}`));
+            row.appendChild(createCell(`#BUG-${patch.bug_id}`));
+            row.appendChild(createStatusCell(patch.status));
+            row.appendChild(createCell(formatDate(patch.created_at)));
+            row.appendChild(
+                createCell(
+                    patch.reviewed_at
+                        ? formatDate(patch.reviewed_at)
+                        : "Not reviewed"
+                )
+            );
+
+            patchTableBody.appendChild(row);
         });
+
+    } catch (error) {
+        patchTableBody.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = createCell("Unable to load patch history.");
+        cell.colSpan = 5;
+        cell.className = "empty-state";
+        row.appendChild(cell);
+        patchTableBody.appendChild(row);
+
+        console.error("Patch loading error:", error);
+    }
+}
+
+// Approve or reject a patch
+async function reviewPatch(patchId, status) {
+    if (!["Approved", "Rejected"].includes(status)) {
+        alert("Invalid patch review status.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_URL}/patches/${patchId}/review`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status: status
+                })
+            }
+        );
 
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.detail || "Project upload failed.");
+            const detail = result.detail;
+
+            throw new Error(
+                typeof detail === "string"
+                    ? detail
+                    : JSON.stringify(detail || "Patch review failed.")
+            );
         }
 
-        showMessage(
-            projectMessage,
-            `Project "${result.project_name}" uploaded successfully! Project ID: ${result.id}`,
-            "success"
-        );
+        alert(result.message || `Patch ${status.toLowerCase()} successfully.`);
 
-        projectForm.reset();
-        await loadProjects();
+        await loadPatches();
 
     } catch (error) {
-        showMessage(projectMessage, error.message, "error");
-        console.error("Project upload error:", error);
-
-    } finally {
-        uploadButton.disabled = false;
-        uploadButton.textContent = "Upload Project →";
+        console.error("Review patch error:", error);
+        alert("Could not review patch: " + error.message);
     }
-});
+}
 
 // Refresh buttons
-refreshButton.addEventListener("click", loadBugs);
-refreshProjectsButton.addEventListener("click", loadProjects);
+if (refreshButton) {
+    refreshButton.addEventListener("click", loadBugs);
+}
+
+if (refreshProjectsButton) {
+    refreshProjectsButton.addEventListener("click", loadProjects);
+}
+
+if (refreshPatchesButton) {
+    refreshPatchesButton.addEventListener("click", loadPatches);
+}
 
 // Initial loading
 document.addEventListener("DOMContentLoaded", function() {
     loadBugs();
     loadProjects();
+    loadPatches();
 });
+
+
