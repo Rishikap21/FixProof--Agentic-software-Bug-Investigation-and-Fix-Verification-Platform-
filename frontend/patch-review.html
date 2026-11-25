@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixProof | Patch Review</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        .patch-header {
+            margin-bottom: 25px;
+        }
+
+        .patch-header h2 {
+            font-size: 23px;
+            margin: 12px 0;
+        }
+
+        .patch-header p {
+            color: #8990a5;
+            font-size: 12px;
+        }
+
+        .bug-info {
+            background: white;
+            border: 1px solid #e9eaf1;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .bug-info h3 {
+            font-size: 16px;
+            margin: 12px 0;
+        }
+
+        .bug-info p {
+            font-size: 12px;
+            color: #747b90;
+            line-height: 1.8;
+        }
+
+        .patch-card {
+            background: white;
+            border: 1px solid #e9eaf1;
+            border-radius: 12px;
+            padding: 23px;
+            margin-bottom: 22px;
+        }
+
+        .patch-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .code-box {
+            background: #17182b;
+            color: #d9dcf0;
+            border-radius: 9px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            line-height: 2;
+            white-space: pre;
+        }
+
+        .removed {
+            color: #ff8585;
+        }
+
+        .added {
+            color: #64e6a3;
+        }
+
+        .change-summary {
+            background: #f5f2ff;
+            padding: 17px;
+            border-radius: 9px;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #51448c;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .approve-button {
+            background: #168c61;
+            color: white;
+        }
+
+        .reject-button {
+            background: #df6262;
+            color: white;
+        }
+
+        .approve-button,
+        .reject-button {
+            border: none;
+            border-radius: 8px;
+            padding: 13px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .approve-button:hover {
+            background: #10734f;
+        }
+
+        .reject-button:hover {
+            background: #c94c4c;
+        }
+
+        .review-status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #fff3df;
+            color: #bd7b20;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #7057e8;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        @media(max-width: 650px) {
+            .review-actions {
+                flex-direction: column;
+            }
+
+            .review-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">F</div>
+            <div>
+                <h2>FixProof</h2>
+                <span>AI Debugging Platform</span>
+            </div>
+        </div>
+
+        <div class="menu-label">WORKSPACE</div>
+
+        <nav class="navigation">
+            <a href="index.html#dashboard" class="nav-link">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="index.html#submit" class="nav-link">
+                <span>＋</span> Report a Bug
+            </a>
+
+            <a href="index.html#projects" class="nav-link">
+                <span>📁</span> Projects
+            </a>
+
+            <a href="index.html#history" class="nav-link">
+                <span>◷</span> Bug History
+            </a>
+
+            <a href="investigation.html" class="nav-link">
+                <span>⌕</span> Investigation
+            </a>
+
+            <a href="patch-review.html" class="nav-link active">
+                <span>⌘</span> Patch Review
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <div>
+                    <strong>System Online</strong>
+                    <small>FixProof API</small>
+                </div>
+            </div>
+
+            <p>FixProof v0.1.0</p>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <span class="breadcrumb">
+                    Workspace / Patch Review
+                </span>
+                <h1>Patch Review</h1>
+            </div>
+
+            <span class="online-badge">
+                ● Review Workspace
+            </span>
+        </header>
+
+        <a href="index.html" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+        <section class="patch-header">
+            <p class="eyebrow">CODE CHANGE MANAGEMENT</p>
+            <h2>Review Proposed Code Fix</h2>
+            <p>
+                Examine the proposed code changes before accepting or rejecting them.
+            </p>
+        </section>
+
+        <!-- BUG INFORMATION -->
+        <section class="bug-info">
+
+            <p class="eyebrow">BUG INFORMATION</p>
+
+            <h3>BUG-001: Incorrect Shopping Cart Total</h3>
+
+            <p>
+                The shopping cart displays an incorrect total when multiple
+                products are added. The application calculates the price
+                using only one product instead of adding all product prices.
+            </p>
+
+            <span class="review-status" id="reviewStatus">
+                Pending Review
+            </span>
+
+        </section>
+
+        <!-- ORIGINAL CODE -->
+        <section class="patch-card">
+
+            <h3>1. Original Code</h3>
+
+            <p class="eyebrow" style="margin-bottom:12px;">
+                BEFORE PROPOSED FIX
+            </p>
+
+            <div class="code-box"><span class="removed">// Original calculation</span>
+function calculateTotal(products) {
+    return products[0].price;
+}</div>
+
+        </section>
+
+        <!-- PROPOSED PATCH -->
+        <section class="patch-card">
+
+            <h3>2. Proposed Code Patch</h3>
+
+            <p class="eyebrow" style="margin-bottom:12px;">
+                AFTER PROPOSED FIX
+            </p>
+
+            <div class="code-box"><span class="added">// Proposed calculation</span>
+function calculateTotal(products) {
+    return products.reduce(
+        (total, product) => total + product.price,
+        0
+    );
+}</div>
+
+        </section>
+
+        <!-- CHANGE SUMMARY -->
+        <section class="patch-card">
+
+            <h3>3. Change Summary</h3>
+
+            <div class="change-summary">
+                <strong>Explanation:</strong>
+
+                <p>
+                    The original function returns only the first product's
+                    price. The proposed implementation uses the reduce()
+                    method to calculate the sum of all product prices.
+                </p>
+
+                <br>
+
+                <strong>Expected improvement:</strong>
+
+                <ul style="padding-left:20px; margin-top:8px;">
+                    <li>Calculates the total of multiple products.</li>
+                    <li>Supports an empty product list with a total of zero.</li>
+                    <li>Provides a more accurate shopping cart calculation.</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <!-- REVIEW ACTIONS -->
+        <section class="patch-card">
+
+            <h3>4. Review Decision</h3>
+
+            <p style="font-size:12px;color:#8990a5;">
+                Review the proposed changes and select an action.
+            </p>
+
+            <div class="review-actions">
+
+                <button
+                    class="approve-button"
+                    onclick="updateReview('Approved')">
+                    ✓ Approve Patch
+                </button>
+
+                <button
+                    class="reject-button"
+                    onclick="updateReview('Rejected')">
+                    ✕ Reject Patch
+                </button>
+
+            </div>
+
+            <p id="reviewMessage"
+               class="form-message"
+               role="status">
+            </p>
+
+        </section>
+
+        <footer class="footer">
+            © 2026 FixProof. Agentic Software Bug Investigation and Fix Verification Platform.
+        </footer>
+
+    </main>
+
+</div>
+
+<script>
+    function updateReview(status) {
+
+        const statusElement =
+            document.getElementById("reviewStatus");
+
+        const messageElement =
+            document.getElementById("reviewMessage");
+
+        statusElement.textContent = status;
+
+        if (status === "Approved") {
+
+            statusElement.style.background = "#e3f7ed";
+            statusElement.style.color = "#168c61";
+
+            messageElement.textContent =
+                "Patch approved successfully (demo only).";
+
+            messageElement.className =
+                "form-message success";
+
+        } else {
+
+            statusElement.style.background = "#fff0f0";
+            statusElement.style.color = "#df6262";
+
+            messageElement.textContent =
+                "Patch rejected (demo only).";
+
+            messageElement.className =
+                "form-message error";
+        }
+    }
+</script>
+
+</body>
+</html>

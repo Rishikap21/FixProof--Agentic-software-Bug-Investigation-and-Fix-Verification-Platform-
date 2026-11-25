@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixProof | Investigation</title>
+    <link rel="stylesheet" href="css/investigation.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">F</div>
+            <div>
+                <h2>FixProof</h2>
+                <span>AI Debugging Platform</span>
+            </div>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav class="navigation">
+            <a href="index.html#dashboard" class="nav-link">▦ Dashboard</a>
+            <a href="index.html#submit" class="nav-link">＋ Report a Bug</a>
+            <a href="index.html#projects" class="nav-link">📁 Projects</a>
+            <a href="index.html#history" class="nav-link">◷ Bug History</a>
+            <a href="investigation.html" class="nav-link active">⌕ Investigation</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <span class="online-dot"></span>
+            <div>
+                <strong>API Connected</strong>
+                <small>FixProof Backend</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">Workspace / Investigation</p>
+                <h1>Bug Investigation</h1>
+            </div>
+            <a href="index.html" class="back-button">← Back to Dashboard</a>
+        </header>
+
+        <section class="intro-card">
+            <p class="eyebrow">FIXPROOF INVESTIGATION CENTER</p>
+            <h2>Understand the bug. Track every step.</h2>
+            <p>
+                Follow the investigation workflow from bug submission
+                to proposed fix and verification.
+            </p>
+        </section>
+
+        <section class="content-card">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">SELECT REPORT</p>
+                    <h2>Choose a Bug Report</h2>
+                    <p>Select a previously submitted bug to inspect.</p>
+                </div>
+                <button id="refreshButton" class="secondary-button">
+                    ↻ Refresh
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label for="bugSelect">Bug Report</label>
+                <select id="bugSelect">
+                    <option value="">Loading bug reports...</option>
+                </select>
+            </div>
+
+            <p id="pageMessage" class="message" role="status"></p>
+        </section>
+
+        <section id="bugDetails" class="content-card hidden">
+            <div class="section-heading">
+                <p class="eyebrow">SELECTED BUG</p>
+                <h2 id="bugHeading">Bug details</h2>
+            </div>
+
+            <div class="details-grid">
+                <div class="detail-box">
+                    <span>REPORT ID</span>
+                    <strong id="bugId">—</strong>
+                </div>
+                <div class="detail-box">
+                    <span>SUBMISSION STATUS</span>
+                    <strong id="bugStatus">—</strong>
+                </div>
+                <div class="detail-box">
+                    <span>SUBMITTED ON</span>
+                    <strong id="bugDate">—</strong>
+                </div>
+            </div>
+
+            <div class="description-box">
+                <h3>Bug Description</h3>
+                <p id="bugDescription"></p>
+            </div>
+        </section>
+
+        <section id="progressSection" class="content-card hidden">
+            <div class="section-heading">
+                <p class="eyebrow">INVESTIGATION WORKFLOW</p>
+                <h2>Investigation Progress</h2>
+                <p>Track the six stages of the FixProof workflow.</p>
+            </div>
+
+            <div class="progress-summary">
+                <div>
+                    <strong id="progressCount">1 of 6 stages completed</strong>
+                    <span id="progressPercent">17%</span>
+                </div>
+                <div class="progress-track">
+                    <div id="progressBar" class="progress-fill"></div>
+                </div>
+                <p id="progressNote">
+                    Only bug submission is currently confirmed.
+                    Further stages require AI workflow integration.
+                </p>
+            </div>
+
+            <div class="timeline">
+
+                <div class="timeline-item completed">
+                    <div class="timeline-marker">✓</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>1. Bug Submitted</h3>
+                            <span class="stage-status completed-label">Completed</span>
+                        </div>
+                        <p>The bug report has been successfully stored in the database.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item pending">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>2. ML Classification</h3>
+                            <span class="stage-status pending-label">Awaiting integration</span>
+                        </div>
+                        <p>The ML model will predict the bug category.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item pending">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>3. Source Code Investigation</h3>
+                            <span class="stage-status pending-label">Awaiting integration</span>
+                        </div>
+                        <p>The AI agent will inspect the uploaded project and relevant source files.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item pending">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>4. Root Cause Identification</h3>
+                            <span class="stage-status pending-label">Awaiting integration</span>
+                        </div>
+                        <p>The agent will identify possible causes and relevant code locations.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item pending">
+                    <div class="timeline-marker">5</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>5. Fix Generation</h3>
+                            <span class="stage-status pending-label">Awaiting integration</span>
+                        </div>
+                        <p>A proposed code patch and its explanation will be displayed here.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item pending">
+                    <div class="timeline-marker">6</div>
+                    <div class="timeline-content">
+                        <div class="stage-heading">
+                            <h3>6. Fix Verification</h3>
+                            <span class="stage-status pending-label">Awaiting integration</span>
+                        </div>
+                        <p>Automated tests will evaluate the proposed fix and possible regressions.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="content-card">
+            <div class="section-heading">
+                <p class="eyebrow">NEXT MODULES</p>
+                <h2>Investigation Results</h2>
+                <p>These areas will display actual results after AI integration.</p>
+            </div>
+
+            <div class="result-grid">
+                <div class="result-box">
+                    <div class="result-icon">⌕</div>
+                    <h3>Bug Classification</h3>
+                    <p>Predicted category and model confidence will appear here.</p>
+                    <span class="result-pending">Awaiting ML integration</span>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-icon">⌘</div>
+                    <h3>Suspected Source Files</h3>
+                    <p>Relevant files and possible bug locations will appear here.</p>
+                    <span class="result-pending">Awaiting AI integration</span>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-icon">⚙</div>
+                    <h3>Proposed Fix</h3>
+                    <p>Generated code changes and explanations will appear here.</p>
+                    <span class="result-pending">Awaiting AI integration</span>
+                </div>
+
+                <div class="result-box">
+                    <div class="result-icon">✓</div>
+                    <h3>Verification Results</h3>
+                    <p>Test results and regression evidence will appear here.</p>
+                    <span class="result-pending">Awaiting verification integration</span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            FixProof © 2026 | Agentic Software Bug Investigation and Fix Verification Platform
+        </footer>
+
+    </main>
+</div>
+
+<script src="js/investigation.js"></script>
+</body>
+</html>
