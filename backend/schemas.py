@@ -1,5 +1,5 @@
+
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -13,6 +13,16 @@ class BugResponse(BaseModel):
     id: int
     title: str
     description: str
+    status: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProjectResponse(BaseModel):
+    id: int
+    project_name: str
+    original_filename: str
     status: str
     created_at: datetime
 
