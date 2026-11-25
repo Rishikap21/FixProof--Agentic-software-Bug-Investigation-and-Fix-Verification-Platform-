@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FixProof | Bug Investigation Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">F</div>
+                <div>
+                    <h2>FixProof</h2>
+                    <span>AI Debugging Platform</span>
+                </div>
+            </div>
+
+            <div class="menu-label">WORKSPACE</div>
+
+            <nav class="navigation">
+                <a href="#dashboard" class="nav-link active">
+                    <span>▦</span> Dashboard
+                </a>
+                <a href="#submit" class="nav-link">
+                    <span>＋</span> Report a Bug
+                </a>
+                <a href="#history" class="nav-link">
+                    <span>◷</span> Bug History
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <div>
+                        <strong>System Online</strong>
+                        <small>FixProof API</small>
+                    </div>
+                </div>
+                <p>FixProof v0.1.0</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <div>
+                    <span class="breadcrumb">Workspace / Dashboard</span>
+                    <h1>Bug Investigation Dashboard</h1>
+                </div>
+                <div class="topbar-right">
+                    <span class="online-badge">● Live Workspace</span>
+                </div>
+            </header>
+
+            <section id="dashboard" class="welcome-section">
+                <div>
+                    <p class="eyebrow">WELCOME TO FIXPROOF</p>
+                    <h2>Investigate. Fix. Verify.</h2>
+                    <p>Track software bugs and verify proposed fixes with AI-powered investigation.</p>
+                </div>
+                <a href="#submit" class="primary-button">＋ Report New Bug</a>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">▦</div>
+                    <p>Total Bug Reports</p>
+                    <h2 id="totalBugs">0</h2>
+                    <span>All submitted reports</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">◷</div>
+                    <p>Under Investigation</p>
+                    <h2 id="investigatingBugs">0</h2>
+                    <span>Currently being processed</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <p>Verified Fixes</p>
+                    <h2 id="verifiedBugs">0</h2>
+                    <span>Verified reports</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon red">!</div>
+                    <p>Unresolved</p>
+                    <h2 id="unresolvedBugs">0</h2>
+                    <span>Awaiting resolution</span>
+                </div>
+            </section>
+
+            <section id="submit" class="content-card">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">NEW SUBMISSION</p>
+                        <h2>Report a Software Bug</h2>
+                        <p>Describe the problem to begin the investigation process.</p>
+                    </div>
+                </div>
+
+                <form id="bugForm">
+                    <div class="form-group">
+                        <label for="bugTitle">Bug Title *</label>
+                        <input
+                            type="text"
+                            id="bugTitle"
+                            placeholder="Example: Shopping cart total is incorrect"
+                            minlength="3"
+                            maxlength="200"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bugDescription">Bug Description *</label>
+                        <textarea
+                            id="bugDescription"
+                            placeholder="Describe what happened, what you expected, and how to reproduce the issue..."
+                            minlength="5"
+                            rows="5"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="form-footer">
+                        <span> * Required fields</span>
+                        <button type="submit" id="submitButton" class="primary-button">
+                            Submit Bug Report →
+                        </button>
+                    </div>
+
+                    <p id="formMessage" class="form-message" role="status"></p>
+                </form>
+            </section>
+
+            <section id="history" class="content-card">
+                <div class="section-heading history-heading">
+                    <div>
+                        <p class="eyebrow">REPORT MANAGEMENT</p>
+                        <h2>Recent Bug Reports</h2>
+                        <p>View and track submitted software bugs.</p>
+                    </div>
+                    <button id="refreshButton" class="secondary-button">↻ Refresh</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>REPORT ID</th>
+                                <th>BUG TITLE</th>
+                                <th>DESCRIPTION</th>
+                                <th>STATUS</th>
+                                <th>SUBMITTED</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bugTableBody">
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    Loading bug reports...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>© 2026 FixProof. Agentic Software Bug Investigation and Fix Verification Platform.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
