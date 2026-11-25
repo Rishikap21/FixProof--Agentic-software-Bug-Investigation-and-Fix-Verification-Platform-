@@ -519,3 +519,90 @@ td:nth-child(2) {
         align-items: flex-start;
     }
 }
+
+
+/* PROJECT UPLOAD SECTION */
+
+.field-help {
+    display: block;
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+#projectFile {
+    cursor: pointer;
+}
+
+#projectFile::file-selector-button {
+    background: #f0edff;
+    color: var(--primary);
+    border: none;
+    border-radius: 6px;
+    padding: 9px 13px;
+    margin-right: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+}
+
+#projectFile::file-selector-button:hover {
+    background: #e5e0ff;
+}
+
+#projectForm .form-footer {
+    margin-top: 20px;
+}
+
+#projectForm .form-message {
+    line-height: 1.6;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#projectHistory {
+    margin-top: 25px;
+}
+
+#projectHistory .section-heading {
+    margin-bottom: 25px;
+}
+
+/* NAVIGATION */
+
+html {
+    scroll-behavior: smooth;
+}
+
+.content-card {
+    scroll-margin-top: 20px;
+}
+
+.nav-link {
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* RESPONSIVE PROJECT TABLE */
+
+@media (max-width: 650px) {
+    #projectForm .form-footer {
+        align-items: stretch;
+    }
+
+    #projectForm .primary-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    #projectHistory .history-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #projectHistory .secondary-button {
+        align-self: flex-start;
+    }
+}

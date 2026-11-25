@@ -1,7 +1,7 @@
 
 const API_URL = "http://127.0.0.1:8000";
 
-// Get HTML elements
+// Bug report elements
 const bugForm = document.getElementById("bugForm");
 const bugTitle = document.getElementById("bugTitle");
 const bugDescription = document.getElementById("bugDescription");
@@ -10,14 +10,23 @@ const formMessage = document.getElementById("formMessage");
 const submitButton = document.getElementById("submitButton");
 const refreshButton = document.getElementById("refreshButton");
 
-// Safely create table cells without inserting untrusted HTML.
+// Project elements
+const projectForm = document.getElementById("projectForm");
+const projectName = document.getElementById("projectName");
+const projectFile = document.getElementById("projectFile");
+const projectTableBody = document.getElementById("projectTableBody");
+const projectMessage = document.getElementById("projectMessage");
+const uploadButton = document.getElementById("uploadButton");
+const refreshProjectsButton = document.getElementById("refreshProjectsButton");
+
+// Create safe table cells
 function createCell(value) {
     const cell = document.createElement("td");
     cell.textContent = value ?? "";
     return cell;
 }
 
-// Format dates for display
+// Format date
 function formatDate(dateString) {
     const date = new Date(dateString);
 
@@ -28,7 +37,7 @@ function formatDate(dateString) {
     return date.toLocaleString();
 }
 
-// Create a status label
+// Create status badge
 function createStatusCell(status) {
     const cell = document.createElement("td");
     const badge = document.createElement("span");
@@ -38,6 +47,12 @@ function createStatusCell(status) {
 
     cell.appendChild(badge);
     return cell;
+}
+
+// Display messages
+function showMessage(element, message, type) {
+    element.textContent = message;
+    element.className = `form-message ${type}`;
 }
 
 // Update dashboard statistics
@@ -62,7 +77,7 @@ function updateStatistics(bugs) {
     document.getElementById("unresolvedBugs").textContent = unresolved;
 }
 
-// Load bug reports from FastAPI
+// Load bug reports
 async function loadBugs() {
     bugTableBody.replaceChildren();
 
@@ -86,7 +101,6 @@ async function loadBugs() {
         const bugs = await response.json();
 
         bugTableBody.replaceChildren();
-
         updateStatistics(bugs);
 
         if (bugs.length === 0) {
@@ -122,7 +136,7 @@ async function loadBugs() {
 
         cell.colSpan = 5;
         cell.className = "empty-state";
-        cell.textContent = "Unable to connect to FixProof API. Start the backend server.";
+        cell.textContent = "Unable to connect to FixProof API.";
 
         row.appendChild(cell);
         bugTableBody.appendChild(row);
@@ -132,7 +146,7 @@ async function loadBugs() {
     }
 }
 
-// Submit a new bug report
+// Submit bug report
 bugForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
@@ -141,6 +155,7 @@ bugForm.addEventListener("submit", async function(event) {
 
     if (title.length < 3 || description.length < 5) {
         showMessage(
+            formMessage,
             "Please enter a valid title and description.",
             "error"
         );
@@ -156,31 +171,26 @@ bugForm.addEventListener("submit", async function(event) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                title: title,
-                description: description
-            })
+            body: JSON.stringify({ title, description })
         });
 
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(
-                result.detail || "Failed to submit bug report."
-            );
+            throw new Error(result.detail || "Failed to submit bug report.");
         }
 
         showMessage(
+            formMessage,
             `Bug report #BUG-${result.id} submitted successfully!`,
             "success"
         );
 
         bugForm.reset();
-
         await loadBugs();
 
     } catch (error) {
-        showMessage(error.message, "error");
+        showMessage(formMessage, error.message, "error");
         console.error("Submission error:", error);
 
     } finally {
@@ -189,14 +199,145 @@ bugForm.addEventListener("submit", async function(event) {
     }
 });
 
-// Display messages
-function showMessage(message, type) {
-    formMessage.textContent = message;
-    formMessage.className = `form-message ${type}`;
+// Load uploaded projects
+async function loadProjects() {
+    projectTableBody.replaceChildren();
+
+    const loadingRow = document.createElement("tr");
+    const loadingCell = document.createElement("td");
+
+    loadingCell.colSpan = 5;
+    loadingCell.className = "empty-state";
+    loadingCell.textContent = "Loading projects...";
+
+    loadingRow.appendChild(loadingCell);
+    projectTableBody.appendChild(loadingRow);
+
+    try {
+        const response = await fetch(`${API_URL}/projects`);
+
+        if (!response.ok) {
+            throw new Error("Could not retrieve projects.");
+        }
+
+        const projects = await response.json();
+
+        projectTableBody.replaceChildren();
+
+        if (projects.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 5;
+            cell.className = "empty-state";
+            cell.textContent = "No projects uploaded yet.";
+
+            row.appendChild(cell);
+            projectTableBody.appendChild(row);
+            return;
+        }
+
+        projects.forEach(project => {
+            const row = document.createElement("tr");
+
+            row.appendChild(createCell(`#PROJECT-${project.id}`));
+            row.appendChild(createCell(project.project_name));
+            row.appendChild(createCell(project.original_filename));
+            row.appendChild(createStatusCell(project.status));
+            row.appendChild(createCell(formatDate(project.created_at)));
+
+            projectTableBody.appendChild(row);
+        });
+
+    } catch (error) {
+        projectTableBody.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 5;
+        cell.className = "empty-state";
+        cell.textContent = "Unable to load projects. Check the backend server.";
+
+        row.appendChild(cell);
+        projectTableBody.appendChild(row);
+
+        console.error("Project loading error:", error);
+    }
 }
 
-// Refresh button
-refreshButton.addEventListener("click", loadBugs);
+// Upload ZIP project
+projectForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-// Load reports when page opens
-document.addEventListener("DOMContentLoaded", loadBugs);
+    const name = projectName.value.trim();
+    const file = projectFile.files[0];
+
+    if (!name) {
+        showMessage(projectMessage, "Please enter a project name.", "error");
+        return;
+    }
+
+    if (!file) {
+        showMessage(projectMessage, "Please select a ZIP file.", "error");
+        return;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".zip")) {
+        showMessage(projectMessage, "Only ZIP files are allowed.", "error");
+        return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+        showMessage(projectMessage, "File size must not exceed 50 MB.", "error");
+        return;
+    }
+
+    uploadButton.disabled = true;
+    uploadButton.textContent = "Uploading...";
+
+    try {
+        const formData = new FormData();
+
+        formData.append("project_name", name);
+        formData.append("file", file);
+
+        const response = await fetch(`${API_URL}/projects/upload`, {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.detail || "Project upload failed.");
+        }
+
+        showMessage(
+            projectMessage,
+            `Project "${result.project_name}" uploaded successfully! Project ID: ${result.id}`,
+            "success"
+        );
+
+        projectForm.reset();
+        await loadProjects();
+
+    } catch (error) {
+        showMessage(projectMessage, error.message, "error");
+        console.error("Project upload error:", error);
+
+    } finally {
+        uploadButton.disabled = false;
+        uploadButton.textContent = "Upload Project →";
+    }
+});
+
+// Refresh buttons
+refreshButton.addEventListener("click", loadBugs);
+refreshProjectsButton.addEventListener("click", loadProjects);
+
+// Initial loading
+document.addEventListener("DOMContentLoaded", function() {
+    loadBugs();
+    loadProjects();
+});
