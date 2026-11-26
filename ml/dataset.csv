@@ -1,0 +1,52 @@
+
+description,category
+"Python code shows invalid syntax because a closing bracket is missing",Syntax Error
+"Application gives a syntax error due to a missing colon after an if statement",Syntax Error
+"Unexpected indentation causes the Python program to fail",Syntax Error
+"Variable declaration contains an invalid assignment operator",Syntax Error
+"Python reports an unterminated string literal in the source file",Syntax Error
+"Function definition is missing a required closing parenthesis",Syntax Error
+"An invalid keyword is used in the Python statement",Syntax Error
+"Import statement contains incorrect syntax",Syntax Error
+"Unexpected token appears near the return statement",Syntax Error
+"Python cannot parse the file because a bracket is not closed",Syntax Error
+"Application crashes with a TypeError when adding a string and integer",Runtime Error
+"Program stops with a ZeroDivisionError during calculation",Runtime Error
+"An IndexError occurs when accessing an unavailable list position",Runtime Error
+"Application crashes because a required file cannot be found",Runtime Error
+"Program raises a NameError when accessing an undefined variable",Runtime Error
+"Server crashes with an AttributeError while accessing an object property",Runtime Error
+"Program terminates unexpectedly due to a KeyError",Runtime Error
+"Application crashes when an invalid input is converted to an integer",Runtime Error
+"Recursive function causes a RecursionError and stops execution",Runtime Error
+"Program raises a FileNotFoundError while opening a configuration file",Runtime Error
+"Shopping cart calculates 100 instead of 200 for two products",Logical Error
+"Discount calculation returns an incorrect final price",Logical Error
+"Login accepts an incorrect password due to faulty condition checking",Logical Error
+"Loop skips the last item because the range condition is incorrect",Logical Error
+"Tax calculation uses the wrong percentage and produces an incorrect amount",Logical Error
+"Program sorts numbers in the wrong order because of incorrect comparison logic",Logical Error
+"Attendance percentage is calculated incorrectly using the wrong formula",Logical Error
+"Search function returns the wrong result due to incorrect filtering logic",Logical Error
+"Bank balance becomes incorrect after subtracting the transaction amount twice",Logical Error
+"Application calculates the average incorrectly by dividing by the wrong count",Logical Error
+"Database insert operation fails and records are not saved",Database Error
+"SQL query returns an error because the table does not exist",Database Error
+"Application cannot connect to the MySQL database server",Database Error
+"User registration data is missing from the database after submission",Database Error
+"Database update query changes the wrong customer record",Database Error
+"Application cannot retrieve records because the SQL query is incorrect",Database Error
+"Duplicate records are inserted because database uniqueness is not checked",Database Error
+"Database connection times out when executing a query",Database Error
+"Foreign key constraint prevents inserting the related record",Database Error
+"Application fails to commit database transactions",Database Error
+"Login button is not visible on the webpage",UI Error
+"Page layout breaks when viewed on a mobile screen",UI Error
+"Submit button does not respond when clicked",UI Error
+"Text overlaps with images in the dashboard",UI Error
+"Navigation menu does not open when selected",UI Error
+"Form input field is displayed outside its container",UI Error
+"Dashboard shows incorrect alignment between its components",UI Error
+"Dropdown menu is hidden behind another page element",UI Error
+"Error message is not displayed after invalid form submission",UI Error
+"Website font size becomes too large on smaller screens",UI Error

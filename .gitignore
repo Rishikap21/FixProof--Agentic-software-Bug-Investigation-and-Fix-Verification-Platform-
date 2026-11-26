@@ -22,3 +22,9 @@ backend/uploads/*
 # Testing
 .pytest_cache/
 .coverage
+# FixProof verification temporary files
+.fixproof_backups/
+.fixproof_reports/
+
+# Generated test cache
+.pytest_cache/
