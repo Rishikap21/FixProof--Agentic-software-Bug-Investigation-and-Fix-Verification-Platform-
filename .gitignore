@@ -1,0 +1,54 @@
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local databases and backups
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+
+# Uploaded projects
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# FixProof verification temporary files
+.fixproof_backups/
+.fixproof_reports/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Log files
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# External dataset - redistribution license unconfirmed
+ml/nlbse_dataset/
+
+# ML artifacts pending redistribution permission
+ml/models/
+ml/model.pkl
+ml/dataset.csv
